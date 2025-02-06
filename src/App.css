@@ -1,0 +1,58 @@
+/* src/App.css */
+.app {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .section {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  input[type="file"], input[type="text"], select {
+    margin: 10px 0;
+    padding: 8px;
+    width: 100%;
+    max-width: 400px;
+    display: block;
+  }
+  
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 0;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .answer-section {
+    min-height: 150px;
+  }
+  
+  .thinking-indicator {
+    color: #666;
+    font-style: italic;
+    margin: 10px 0;
+  }
+  
+  .answer-content {
+    white-space: pre-wrap;
+    line-height: 1.6;
+  }
+  
+  .status {
+    color: #2196F3;
+    margin-top: 5px;
+  }
+  
