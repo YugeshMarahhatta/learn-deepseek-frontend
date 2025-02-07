@@ -27,6 +27,7 @@ function App() {
   const [dots, setDots] = useState('');
   const thinkingIntervalRef = useRef(null);
   const messagesEndRef = useRef(null);
+  const fileInputRef = useRef(null); // Reference for the file input element
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -58,15 +59,17 @@ function App() {
       const response = await axios.post('http://localhost:8020/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
+      // Refresh the document list from server
       getDocument();
-      setDocuments([...documents, response.data.documentId]);
+      // Optionally, add the new document to the state list
+      setDocuments(prev => [...prev, { documentId: response.data.documentId }]);
       setUploadStatus('Upload successful!');
-      // Add system message for successful upload
-      setMessages(prev => [...prev, {
-        type: 'system',
-        content: `Document uploaded successfully: ${file.name}`,
-        timestamp: new Date().toISOString()
-      }]);
+      toast(`Document uploaded successfully: ${file.name}`, { hideProgressBar: false });
+      // Clear the file input so that it is ready for the next upload
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      setFile(null);
       setTimeout(() => setUploadStatus(''), 2000);
     } catch (error) {
       setUploadStatus('Upload failed');
@@ -189,10 +192,11 @@ function App() {
             <form onSubmit={handleUpload}>
               <input
                 type="file"
+                ref={fileInputRef}
                 onChange={(e) => setFile(e.target.files[0])}
                 className="file-input"
               />
-              <button type="submit" className="btn primary">Upload</button>
+              <button type="submit" className="btn send-btn">Upload</button>
             </form>
             {uploadStatus && <p className="status-message">{uploadStatus}</p>}
           </div>
