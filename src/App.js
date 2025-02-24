@@ -179,6 +179,25 @@ function App() {
       .catch(err => alert('Failed to copy text: ', err));
   };
 
+  //Clear history
+  const clearHistory = async (documentId) => {
+    try {
+      await fetch(`http://localhost:8020/api/ask/${documentId}/history`, {
+        method: 'DELETE'
+      });
+    } catch (error) {
+      console.error('Failed to clear history:', error);
+    }
+  };
+  
+  const handleDocumentChange = async (e) => {
+    const newDocId = e.target.value;
+    if (selectedDoc) {
+      await clearHistory(selectedDoc);
+    }
+    setSelectedDoc(newDocId);
+    setMessages([]);
+  };
   return (
     <div className="app-container">
       <header className="chat-header">
@@ -204,13 +223,12 @@ function App() {
           <div className="document-section card">
             <h2>Select Document</h2>
             <select
-              onChange={(e) => setSelectedDoc(e.target.value)}
+              onChange={handleDocumentChange}
               value={selectedDoc}
               className="doc-select"
             >
               <option value="">Select a document</option>
               {documents.map(doc => {
-                // Extract file name after the first dash, if it exists
                 const displayName = doc?.documentId?.includes('-')
                   ? doc.documentId.substring(doc.documentId.indexOf('-') + 1)
                   : doc.documentId;
